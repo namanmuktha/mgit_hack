@@ -104,13 +104,13 @@ def login_form():
     password = request.form.get('password')
     var = Log_in(username, password)
     if var == "Logged in successfully":
-        return redirect(url_for('page2'))
+        return redirect(url_for('mainPage'))
     else:
         return render_template('./loginPage.html', error=var)
 
-@app.route('/Page2')
-def page2():
-    return render_template('./loginPage.html')
+@app.route('/mainPage')
+def mainPage():
+    return render_template('./mainPage.html')
 
 @app.route('/register')
 def register():
@@ -127,10 +127,10 @@ def registerPage():
     age = int(age_str)
     
     if exists(username):
-        return render_template('./mainPage.html',error="Username already exists")
+        return render_template('./signup.html',error="Username already exists")
     else:
         create_user(username, email, password, age, gender)
-        return redirect(url_for('page2'))
+        return redirect(url_for('mainPage'))
     
 # @app.route('/account', methods=['GET', 'POST'])
 # def account():
@@ -162,28 +162,6 @@ def registerPage():
 #     users = UserDetails.query.all()
 #     DisQuestions = DisorderQuestions.query.all()
 #     return render_template('./adminPage.html',user=user, users=users,CharacterQuestions=CharQuestions,DisorderQuestions=DisQuestions)
-
-
-
-# @app.route('/edit_question/<int:question_id>', methods=['PUT'])
-# def edit_question(question_id):
-#     try :
-#         data = request.json
-#         newQuestionText = request.json['questionText']
-#         tableId = request.json['tableId']
-
-#         #print(newQuestionText,tableId)
-#         if tableId == 'CharacterQuestionsTable':
-#             ques = CharacterQuestions.query.get(question_id)
-#         elif tableId == 'DisorderQuestionsTable':
-#             ques = DisorderQuestions.query.get(question_id)
-#         else :
-#             print("Error in table id")
-#         ques.question = newQuestionText
-#         db.session.commit()
-#         return jsonify({"message": "Question edited successfully"}), 200
-#     except Exception as e:
-#         return jsonify(error=str(e)), 500
     
     
 # # delete user from database
