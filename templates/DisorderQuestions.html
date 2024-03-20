@@ -7,43 +7,101 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        .question {
-            display: none;
-        }
-        .question.active {
-            display: block;
-        }
+        
+        body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    background-image: url("../static/WhatsApp\ Image\ 2024-03-20\ at\ 16.49.48_8abfad78.jpg");
+    background-size: cover;
+}
+.QuestionsContainer {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000;
+    padding: 1rem;
+}
+.QuestionsContainer form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.QuestionsContainer .question {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.QuestionsContainer .question {
+    display: none;
+}
+.QuestionsContainer .question.active {
+    display: block;
+}
+.QuestionsContainer select {
+    width: 5rem;
+    height: 2rem;
+    font-size: medium;
+    margin-top: 1rem;
+}
+.QuestionsContainer button {
+    width: 5rem;
+    font-size: medium;
+    margin-top: 1rem;
+}
+.QuestionsContainer .label2 {
+    font-size: larger;
+    padding: 1rem;
+}
+
     </style>
 </head>
-<body>
+<body >
     <div class="QuestionsContainer">
         <div class="label2">Answer these Questions: Dis</div>
         <div class="Questions">
             <form class="questionForm" action="/disorder_submit" method="post">
                 {% for question in questions %}
                 <div class="question" id="question{{ question.id }}">
-                    <label class="txt" for="answer{{ question.id }}">{{ question.question }}</label>
+                    <label class="txt" for="answer{{ question.id }}">{{ question.question }}</label><br>
                     <select id="answer{{ question.id }}" name="answer{{ question.id }}" required>
                         <option value="" disabled selected>select</option>
                         <option value="1">True</option>
                         <option value="0">False</option>
-                    </select>
-                    <button type="button" onclick="nextQuestion({{ question.id }})">Next</button>
+                    </select><br>   
+                    <button type="button" onclick="nextQuestion({{ question.id }})">Next</button><br>
                 </div>
                 {% endfor %}
-                <input class="submit" type="submit" value="Submit" style="display: none;">
+                <input type="hidden" id="answers" name="answers">
+                <input class="submit" type="submit" value="Submit">
             </form>
         </div>
     </div>
     <script>
         var questions = document.getElementsByClassName('question');
+        var answers = [];
         questions[0].classList.add('active');
 
         function nextQuestion(id) {
+            var answer = document.getElementById('answer' + id).value;
+            if(answer == "") {
+                alert('Please select an answer');
+                return;
+            }
+            answers.push(answer);
+            
             document.getElementById('question' + id).classList.remove('active');
             if (id < questions.length) {
                 document.getElementById('question' + (id + 1)).classList.add('active');
             } else {
+                document.getElementById('answers').value = JSON.stringify(answers);
                 document.getElementsByClassName('submit')[0].style.display = 'block';
             }
         }

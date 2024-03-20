@@ -49,6 +49,11 @@
                     <p style="text-align: center; margin-top: 1rem;">Don't have an account? <a href="{{ url_for('register') }}" style="color: black;">Signup</a></p>
                 </div>
                 <div class="form-group">
+                    {% if var is not None %}
+                    <h2>{{  var }}</h2>
+                    
+                </div>
+                <div class="form-group">
                     {% if error %}
                     <h6 style="color: red;">{{  error }}</h6>
                     {% endif %}
