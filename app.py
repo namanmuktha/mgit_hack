@@ -247,22 +247,27 @@ def disorder_submit():
     except ValueError:
         return "Please enter valid numbers for the questions."
 
-@app.route('/profile')
-def profile():
+@app.route('/profile<string:username>')
+def profile(username):
     DB1 = db.reference(path=f"/{session.get('username')}/diagnosis/character", url=URL)
     DB2 = db.reference(path=f"/{session.get('username')}/diagnosis/disorder", url=URL)
 
     character = DB1.get()
     disorder = DB2.get()
     ans1 = []
-    for key, value in character.items():
-        print(key, value)
-        ans1.append((value.split()[0], value.split()[1], value.split()[2]))
+    if character is not None :
+        for key, value in character.items():
+            print(key, value)
+            ans1.append((value.split()[0], value.split()[1], value.split()[2]))
     ans2 = []
-    for key, value in disorder.items():
-        print(key, value)
-        ans2.append((value.split()[0], value.split()[1], value.split()[2]))
-    return render_template('./profile.html', character = ans1, disorder = ans2, Name = session.get('username'))
+    if disorder is not None:
+        for key, value in disorder.items():
+            print(key, value)
+            ans2.append((value.split()[0], value.split()[1], value.split()[2]))
+    
+    user = DB.child(session.get('username')).get()
+    print((ans1))
+    return render_template('./profile.html', character = ans1, disorder = ans2, user = user, username = session.get('username'))
 
 if __name__ == '__main__':
     app.run(debug=True)
