@@ -60,6 +60,9 @@
     font-size: larger;
     padding: 1rem;
 }
+.submit{
+    display: none;
+}
 
     </style>
 </head>
@@ -96,7 +99,7 @@
                 return;
             }
             answers.push(answer);
-            
+
             document.getElementById('question' + id).classList.remove('active');
             if (id < questions.length) {
                 document.getElementById('question' + (id + 1)).classList.add('active');

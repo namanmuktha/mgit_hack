@@ -60,19 +60,8 @@ latitude = 0.0
 longitude = 0.0
 
 
-def load():
-    try:
-        with open('./models/atmospherepickle.pkl', 'rb') as f:
-            atmospherePickle = pickle.load(f)
-
-        with open('./models/character.pkl', 'rb') as f:
-            characterPickle = pickle.load(f)
-
-        with open('./models/disorder.pkl', 'rb') as f:
-            disorderPickle = pickle.load(f)
-    except Exception as e:
-        print(e)
-        return None
+characterPickle = joblib.load('./models/Personality.joblib')
+disorderPickle = joblib.load('./models/mental_disorder_model.joblib')
     
 
 def celsius_to_fahrenheit(celsius):
@@ -178,10 +167,10 @@ def character_submit():
     try:
         if len(answers) != 5:
             return "Error in number of questions with feature array"
-        if user.gender == 'M' :
-            features = [2, user.age] + answers
+        if user['gender'] == 'M' :
+            features = [2, user['age']] + answers
         else :
-            features = [1, user.age] + answers
+            features = [1, user['age']] + answers
         result = characterPickle.predict([features])
         label_mapping = {
                           0 : 'dependable',
@@ -191,10 +180,10 @@ def character_submit():
                           4 : 'serious'
                         }
         
-        db.child(username).child("character").set(label_mapping[result[0]])
+        DB.child(username).child("character").set(label_mapping[result[0]])
         character_name = label_mapping[result[0]]
         result = f"you are probably {character_name} person"
-        return render_template('./resultPage.html', result=result, Name=user.name, gender=user.gender)
+        return render_template('./resultPage.html', result=result, Name=session.get('username'), gender=user['gender'])
     except ValueError:
         return "Please enter valid numbers for the questions."
 
@@ -210,7 +199,7 @@ def disorder_submit():
     try:
         if len(answers) != 26:
             return "Error in number of questions with feature array"
-        features = answers + [user.age]
+        features = answers + [user['age']]
         result = disorderPickle.predict([features])
         label_mapping = { 0 : '89+gfADHD',
                           1 : 'ASD',
@@ -228,10 +217,10 @@ def disorder_submit():
         result_int = int(result)
         disorder_name = label_mapping[result_int]
 
-        db.child(username).child("disorder").set(disorder_name)
+        DB.child(username).child("disorder").set(disorder_name)
 
         result = f"you might have risk of {disorder_name} disorder"
-        return render_template('./resultPage.html',result=result,Name = user.name, gender = user.gender)
+        return render_template('./resultPage.html',result=result,Name = session.get('username'), gender = user['gender'])
     except ValueError:
         return "Please enter valid numbers for the questions."
 
@@ -295,5 +284,4 @@ def disorder_submit():
 
 
 if __name__ == '__main__':
-    load()
     app.run(debug=True)
