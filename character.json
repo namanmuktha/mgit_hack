@@ -1,18 +1,23 @@
 {
   "questions": [
     {
+      "id": 1,
       "question": "Openness: On a scale of 1 to 10, how open are you to new experiences and ideas?"
     },
     {
+      "id": 2,
       "question": "Neuroticism: Rate your ability to handle stress and negative emotions. Is it closer to 1 (calm) or 10 (anxious)?"
     },
     {
+      "id": 3,
       "question": "Conscientiousness: How well do you follow through on tasks and pay attention to details? Rate yourself from 1 (not at all) to 10 (very much)."
     },
     {
+      "id": 4,
       "question": "Agreeableness: Rate your friendliness, cooperativeness, and compassion. Are you closer to 1 (not very) or 10 (very)?"
     },
     {
+      "id": 5,
       "question": "Extraversion: On a scale of 1 to 10, how much do you enjoy social interactions and being around people?"
     }
   ]
