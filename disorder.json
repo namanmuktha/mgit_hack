@@ -1,81 +1,107 @@
 {
   "questions": [
     {
+      "id": 1,
       "question": "Feeling nervous: Do you often feel nervous?"
     },
     {
+      "id": 2,
       "question": "Panic: Have you ever experienced a panic attack?"
     },
     {
+      "id": 3,
       "question": "Breathing rapidly: Do you find yourself breathing rapidly in certain situations?"
     },
     {
+      "id": 4,
       "question": "Sweating: Do you experience excessive sweating, even when it's not hot?"
     },
     {
+      "id": 5,
       "question": "Trouble in concentration: Do you have difficulty concentrating on tasks?"
     },
     {
+      "id": 6,
       "question": "Trouble in sleeping: Do you have trouble falling asleep or staying asleep?"
     },
     {
+      "id": 7,
       "question": "Trouble with work: Do you find it challenging to perform well at work or in school?"
     },
     {
+      "id": 8,
       "question": "Hopelessness: Do you sometimes feel hopeless about the future?"
     },
     {
+      "id": 9,
       "question": "Anger: Do you experience episodes of intense anger?"
     },
     {
+      "id": 10,
       "question": "Overreact: Do you tend to overreact to situations?"
     },
     {
+      "id": 11,
       "question": "Change in eating: Have you noticed a change in your eating habits, such as eating more or less than usual?"
     },
     {
+      "id": 12,
       "question": "Suicidal thought: Have you had thoughts of suicide?"
     },
     {
+      "id": 13,
       "question": "Feeling tired: Do you often feel tired, even after getting enough sleep?"
     },
     {
+      "id": 14,
       "question": "Close friend: Do you have a close friend or family member you can confide in?"
     },
     {
+      "id": 15,
       "question": "Social media addiction: Do you spend a lot of time on social media?"
     },
     {
+      "id": 16,
       "question": "Weight gain: Have you gained weight recently?"
     },
     {
+      "id": 17,
       "question": "Introvert: Would you describe yourself as more of an introverted person?"
     },
     {
+      "id": 18,
       "question": "Popping up stressful memory: Do you experience flashbacks or memories of stressful events?"
     },
     {
+      "id": 19,
       "question": "Nightmares: Do you have nightmares or disturbing dreams?"
     },
     {
+      "id": 20,
       "question": "Avoid people or activities: Do you avoid people or activities that remind you of negative experiences?"
     },
     {
+      "id": 21,
       "question": "Feeling negative: Do you often feel negative about yourself or your life?"
     },
     {
+      "id": 22,
       "question": "Trouble concentrating: Do you have trouble concentrating on tasks?"
     },
     {
+      "id": 23,
       "question": "Blaming yourself: Do you tend to blame yourself for things that go wrong?"
     },
     {
+      "id": 24,
       "question": "Hallucinations: Have you ever experienced hallucinations, such as seeing or hearing things that aren't there?"
     },
     {
+      "id": 25,
       "question": "Repetitive behavior: Do you engage in repetitive behaviors, such as counting or checking things repeatedly?"
     },
     {
+      "id": 26,
       "question": "Increased energy: Have you experienced a sudden increase in energy levels?"
     }
   ]
