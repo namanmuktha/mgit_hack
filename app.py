@@ -266,7 +266,6 @@ def profile(username):
             ans2.append((value.split()[0], value.split()[1], value.split()[2]))
     
     user = DB.child(session.get('username')).get()
-    print((ans1))
     return render_template('./profile.html', character = ans1, disorder = ans2, user = user, username = session.get('username'))
 
 if __name__ == '__main__':
