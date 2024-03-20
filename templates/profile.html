@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html  lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>SAMAM</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../static/account.css">
+        <style>
+            body{
+                background-image: url("../static/WhatsApp\ Image\ 2024-03-20\ at\ 16.49.48_8abfad78.jpg");
+                background-size: cover;
+                height: 100vh;
+            }
+
+        </style>
+    </head>
+    <body >
+
+        <div class="accountContainer">
+            <div class="details">
+                <div class="label2 block row-1">Account Session :</div><hr>
+                <div class="txt block row-2 col-1">Name : {{ username }}</div>
+                <div class="block row-3">
+                    <div class="txt col-1">Email : {{ user.email }}</div>
+                    <div class="txt col-2">Age : {{ user.age }}</div>
+                    <div class="txt col-3">Gender : {{ user.gender }}</div>
+                </div>
+                <br>
+                <div class="label2 block row-4">Your Mental Health Report :</div><hr>
+                <div class="block row-5">
+                    <div class="reports col-1">
+                        <span class="txt">Character Result:</span>
+                        <table border="1" id="CharacterResult"><hr>
+                            <thead>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Result</th>
+                            </thead>
+                            <tbody>
+                                {% for charRes in character %}
+                                <tr>
+                                    <td>{{charRes[0]}}</td>
+                                    <td>{{charRes[1]}}</td>
+                                    <td>{{charRes[2]}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="reports col-2">
+                        <span class="txt">Disorder Result:</span><hr>
+                            <table border="1" id="disorderResult">
+                                <thead>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Result</th>
+                                </thead>
+                                <tbody>
+                                    {% for disRes in disorder %}
+                                    <tr>
+                                        <td>{{disRes[0]}}</td>
+                                        <td>{{disRes[1]}}</td>
+                                        <td>{{disRes[2]}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <div class="block row-6">
+                    <div class="graphs col-1">Graph1</div>
+                    <div class="graphs col-2">Graph2</div>
+                </div>
+            </div>  
+        </div>
+        
+
+        
+        
+    </body>    
+</html>
