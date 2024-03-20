@@ -89,12 +89,6 @@ def get_weather(api_key, lat, lon):
     else:
         return "Weather data not available for this location!"
 
-# def get_user_location():
-#     g = geocoder.ip('me')
-#     return g.latlng
-
-
-
 @app.route('/')
 def home():
     return render_template('./loginPage.html')
@@ -180,11 +174,19 @@ def character_submit():
                           4 : 'serious'
                         }
         
-        DB.child(username).child("character").set(label_mapping[result[0]])
+        date = get_current_date()
+        time = get_current_time()
+        dateTime = f"{date} {time}"
+
+        DB1 = db.reference(path=f"/{username}/diagnosis/character", url=URL)
+
+        DB1.push(f"{dateTime} {label_mapping[result[0]]}")
+
         character_name = label_mapping[result[0]]
         result = f"you are probably {character_name} person"
         return render_template('./resultPage.html', result=result, Name=session.get('username'), gender=user['gender'])
-    except ValueError:
+    except Exception as e:
+        print(e)
         return "Please enter valid numbers for the questions."
 
 @app.route('/disorder_submit', methods=['GET', 'POST'])
@@ -217,71 +219,35 @@ def disorder_submit():
         result_int = int(result)
         disorder_name = label_mapping[result_int]
 
-        DB.child(username).child("disorder").set(disorder_name)
+        date = get_current_date()
+        time = get_current_time()
+        dateTime = f"{date} {time}"
+
+        DB1 = db.reference(path=f"/{username}/diagnosis/disorder", url=URL)
+
+        DB1.push(f"{dateTime} {disorder_name}")
 
         result = f"you might have risk of {disorder_name} disorder"
         return render_template('./resultPage.html',result=result,Name = session.get('username'), gender = user['gender'])
     except ValueError:
         return "Please enter valid numbers for the questions."
 
-    
-# @app.route('/account', methods=['GET', 'POST'])
-# def account():
-#     try:
-#         user_email = session.get('user_email')
-#         user = UserDetails.query.get(user_email)
-#         if user_email == 'eligetivignesh@gmail.com':
-#             return redirect(url_for('adminPage'))
-#         charResult = CharacterResult.query.filter_by(email=user_email).all()
-#         disResult = DisorderResult.query.filter_by(email=user_email).all()
-#         return render_template('./account.html',user = user,
-#                                charResult = charResult,
-#                                disResult = disResult
-#                                )
-#     except Exception as e:
-#         return jsonify(error=str(e)), 500
+@app.route('/profile')
+def profile():
+    DB1 = db.reference(path=f"/{session.get('username')}/diagnosis/character", url=URL)
+    DB2 = db.reference(path=f"/{session.get('username')}/diagnosis/disorder", url=URL)
 
-
-# @app.route('/adminPage', methods=['GET', 'POST'])
-# def adminPage():
-#     user_email = session.get('user_email')
-#     user = UserDetails.query.get(user_email)
-#     CharQuestions = CharacterQuestions.query.all()
-#     users = UserDetails.query.all()
-#     DisQuestions = DisorderQuestions.query.all()
-#     return render_template('./adminPage.html',user=user, users=users,CharacterQuestions=CharQuestions,DisorderQuestions=DisQuestions)
-    
-    
-# # delete user from database
-# @app.route('/delete_user/<int:user_id>', methods=['DELETE'])
-# def delete_user(user_id):
-#     user = UserDetails.query.get(user_id)
-#     if not user:
-#         return jsonify({"error": "User not found"}), 404
-
-#     db.session.delete(user)  # pass the user object
-#     db.session.commit()
-
-#     return jsonify({"message": "User deleted successfully"}), 200
-
-# @app.route('/character_submit', methods=['GET', 'POST'])	
-# def characterSubmit():
-#     user_email = session.get('user_email')
-#     user = UserDetails.query.get(user_email)
-#     questions = CharacterQuestions.query.all()
-#     noOfQuestions = len(questions)
-#     question_array = [0] * noOfQuestions
-
-
-# @app.route('/disorder_submit', methods=['GET', 'POST'])
-# def disorderSubmit():
-#     user_email = session.get('user_email')  
-#     latest_user = UserDetails.query.get(user_email)
-#     questions = DisorderQuestions.query.all()
-#     noOfQuestions = len(questions)
-#     question_array = [0] * noOfQuestions
-
-
+    character = DB1.get()
+    disorder = DB2.get()
+    ans1 = []
+    for key, value in character.items():
+        print(key, value)
+        ans1.append((value.split()[0], value.split()[1], value.split()[2]))
+    ans2 = []
+    for key, value in disorder.items():
+        print(key, value)
+        ans2.append((value.split()[0], value.split()[1], value.split()[2]))
+    return render_template('./profile.html', character = ans1, disorder = ans2, Name = session.get('username'))
 
 if __name__ == '__main__':
     app.run(debug=True)
