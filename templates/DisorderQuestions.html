@@ -76,7 +76,7 @@
                         <option value="1">ofe</option>
                         <option value="0">rare</option>
                     </select><br>   
-                    <button type="button" onclick="nextQuestion({{ question.id }})">Next</button><br>
+                    <button type="button" onclick="nextQuestion('{{ question.id }}')">Next</button><br>
                 </div>
                 {% endfor %}
                 <input type="hidden" id="answers" name="answers">
