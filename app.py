@@ -24,6 +24,7 @@ DB = db.reference(path="/", url=URL)
 
 app = Flask(__name__)
 
+app.secret_key = "mgit-hack-c6060"
 
 def get_current_date():
     return datetime.now(pytz.timezone('Asia/Kolkata')).date()
@@ -57,11 +58,22 @@ def exists(username):
 api_key = "0c6367c0ffc59182e0e17fbbe7ced418"
 latitude = 0.0
 longitude = 0.0
-#loding models
 
-# atmospherePickle = joblib.load('./Models/atmosphereModel.joblib')
-# characterPickle = joblib.load('./Models/characterModel.joblib')
-# disorderPickle = joblib.load('./Models/disorderModel.joblib')
+
+def load():
+    try:
+        with open('./models/atmospherepickle.pkl', 'rb') as f:
+            atmospherePickle = pickle.load(f)
+
+        with open('./models/character.pkl', 'rb') as f:
+            characterPickle = pickle.load(f)
+
+        with open('./models/disorder.pkl', 'rb') as f:
+            disorderPickle = pickle.load(f)
+    except Exception as e:
+        print(e)
+        return None
+    
 
 def celsius_to_fahrenheit(celsius):
     fahrenheit = (celsius * 9/5) + 32
@@ -104,13 +116,14 @@ def login_form():
     password = request.form.get('password')
     var = Log_in(username, password)
     if var == "Logged in successfully":
+        session["username"] = username
         return redirect(url_for('mainPage'))
     else:
         return render_template('./loginPage.html', error=var)
 
 @app.route('/mainPage')
 def mainPage():
-    return render_template('./mainPage.html')
+    return render_template('./mainPage.html', username = session.get('username'))
 
 @app.route('/register')
 def register():
@@ -130,7 +143,98 @@ def registerPage():
         return render_template('./signup.html',error="Username already exists")
     else:
         create_user(username, email, password, age, gender)
+        session["username"] = username
         return redirect(url_for('mainPage'))
+    
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return render_template('./loginPage.html')
+
+@app.route('/character_form', methods=['GET', 'POST'])
+def character_form():
+    with open('character.json') as file:
+        data = json.load(file)
+        questions = data['questions']
+
+    return render_template('./CharacterQuestions.html',questions = questions)
+
+@app.route('/disorder_form', methods=['GET', 'POST'])
+def disorder_form():
+    with open('disorder.json') as file:
+        data = json.load(file)
+        questions = data['questions']
+
+    return render_template('./DisorderQuestions.html',questions = questions)
+
+@app.route('/character_submit', methods=['GET', 'POST'])
+def character_submit():
+    ans = json.loads(request.form.get('answers'))
+    answers = [int(a) for a in ans]
+
+    user = DB.child(session.get('username')).get()
+    username = session.get('username')
+
+    try:
+        if len(answers) != 5:
+            return "Error in number of questions with feature array"
+        if user.gender == 'M' :
+            features = [2, user.age] + answers
+        else :
+            features = [1, user.age] + answers
+        result = characterPickle.predict([features])
+        label_mapping = {
+                          0 : 'dependable',
+                          1 : 'extraverted',
+                          2 :'lively',
+                          3 :'responsible',
+                          4 : 'serious'
+                        }
+        
+        db.child(username).child("character").set(label_mapping[result[0]])
+        character_name = label_mapping[result[0]]
+        result = f"you are probably {character_name} person"
+        return render_template('./resultPage.html', result=result, Name=user.name, gender=user.gender)
+    except ValueError:
+        return "Please enter valid numbers for the questions."
+
+@app.route('/disorder_submit', methods=['GET', 'POST'])
+def disorder_submit():
+    ans = json.loads(request.form.get('answers'))
+
+    answers = [int(a) for a in ans]
+
+    user = DB.child(session.get('username')).get()
+    username = session.get('username')
+
+    try:
+        if len(answers) != 26:
+            return "Error in number of questions with feature array"
+        features = answers + [user.age]
+        result = disorderPickle.predict([features])
+        label_mapping = { 0 : '89+gfADHD',
+                          1 : 'ASD',
+                          2 : 'Loneliness',
+                          3 : 'MDD',
+                          4 : 'OCD',
+                          5 : 'PDD',
+                          6 : 'PTSD',
+                          7 : 'anexiety',
+                          8 : 'bipolar',
+                          9 : 'eating disorder',
+                         10 : 'psychotic deprission',
+                         11 :'sleeping disorder'
+                        }
+        result_int = int(result)
+        disorder_name = label_mapping[result_int]
+
+        db.child(username).child("disorder").set(disorder_name)
+
+        result = f"you might have risk of {disorder_name} disorder"
+        return render_template('./resultPage.html',result=result,Name = user.name, gender = user.gender)
+    except ValueError:
+        return "Please enter valid numbers for the questions."
+
     
 # @app.route('/account', methods=['GET', 'POST'])
 # def account():
@@ -147,11 +251,6 @@ def registerPage():
 #                                )
 #     except Exception as e:
 #         return jsonify(error=str(e)), 500
-
-# @app.route('/logout')
-# def logout():
-#     session.pop('user_email', None)
-#     return render_template('./loginPage.html')
 
 
 # @app.route('/adminPage', methods=['GET', 'POST'])
@@ -176,24 +275,6 @@ def registerPage():
 
 #     return jsonify({"message": "User deleted successfully"}), 200
 
-
-
-# @app.route('/character_form', methods=['GET', 'POST'])
-# def character_form():
-#     questions  = CharacterQuestions.query.all()
-#     #for i in range (0,len(questions)):
-#     #    print(questions[i].question)
-
-#     return render_template('./CharacterQuestions.html',questions = questions)
-
-# @app.route('/disorder_form', methods=['GET', 'POST'])
-# def disorder_form():
-#     questions  = DisorderQuestions.query.all()
-#     #for i in range (0,len(questions)):
-#     #    print(questions[i].question)
-
-#     return render_template('./DisorderQuestions.html',questions = questions)
-
 # @app.route('/character_submit', methods=['GET', 'POST'])	
 # def characterSubmit():
 #     user_email = session.get('user_email')
@@ -201,37 +282,7 @@ def registerPage():
 #     questions = CharacterQuestions.query.all()
 #     noOfQuestions = len(questions)
 #     question_array = [0] * noOfQuestions
-#     try:
-#         for i in range (0,noOfQuestions):
-#             question_array[i] = int(request.form.get("question "+str(questions[i].id)))
 
-#         if len(question_array) != 5:
-#             return "Error in number of questions with feature array"
-#         if user.gender == 'male' :
-#             features = [2, user.age] + question_array
-#         else :
-#             features = [1, user.age] + question_array
-#         result = characterPickle.predict([features])
-#         label_mapping = {
-#                           0 : 'dependable',
-#                           1 : 'extraverted',
-#                           2 :'lively',
-#                           3 :'responsible',
-#                           4 : 'serious'
-#                         }
-        
-#         #storing the result in the database
-#         new_result = CharacterResult(
-#             email=user_email,
-#             result=label_mapping[result[0]],
-#         )
-#         db.session.add(new_result)
-#         db.session.commit()
-#         character_name = label_mapping[result[0]]
-#         result = f"you are probably {character_name} person"
-#         return render_template('./resultPage.html', result=result, Name=user.name, gender=user.gender)
-#     except ValueError:
-#         return "Please enter valid numbers for the questions."
 
 # @app.route('/disorder_submit', methods=['GET', 'POST'])
 # def disorderSubmit():
@@ -240,43 +291,9 @@ def registerPage():
 #     questions = DisorderQuestions.query.all()
 #     noOfQuestions = len(questions)
 #     question_array = [0] * noOfQuestions
-#     try:
-#         for i in range(0,noOfQuestions):
-#             question_array[i] = int(request.form.get("question"+str(questions[i].id)))
-#         if len(question_array) != 26:
-#             return "Error in number of questions with feature array"
-#         features = question_array + [latest_user.age]
-#         result = disorderPickle.predict([features])
-#         label_mapping = { 0 : '89+gfADHD',
-#                           1 : 'ASD',
-#                           2 : 'Loneliness',
-#                           3 : 'MDD',
-#                           4 : 'OCD',
-#                           5 : 'PDD',
-#                           6 : 'PTSD',
-#                           7 : 'anexiety',
-#                           8 : 'bipolar',
-#                           9 : 'eating disorder',
-#                          10 : 'psychotic deprission',
-#                          11 :'sleeping disorder'
-#                         }
-#         result_int = int(result)
-#         disorder_name = label_mapping[result_int]
-
-#         #storing the result in the database
-#         new_result = DisorderResult(
-#             email=user_email,
-#             result=disorder_name,
-#         )
-#         db.session.add(new_result)
-#         db.session.commit()
-
-#         result = f"you might have risk of {disorder_name} disorder"
-#         return render_template('./resultPage.html',result=result,Name = latest_user.name, gender = latest_user.gender)
-#     except ValueError:
-#         return "Please enter valid numbers for the questions."
 
 
 
 if __name__ == '__main__':
+    load()
     app.run(debug=True)
