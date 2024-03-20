@@ -97,6 +97,8 @@ def home():
 def login_form():
     username = request.form.get('username')
     password = request.form.get('password')
+    if DB.child(username).get('isAdmin'):
+        return redirect('/admin')
     var = Log_in(username, password)
     if var == "Logged in successfully":
         session["username"] = username
@@ -128,7 +130,20 @@ def registerPage():
         create_user(username, email, password, age, gender)
         session["username"] = username
         return redirect(url_for('mainPage'))
-    
+@app.route('/admin')
+def admin_dashboard():
+    db_val_ref=db.reference(path='/',url=URL)
+    dv_val_value=db_val_ref.get()
+    # users = []
+    # for key, val in dv_val_value:
+    #     for k, v in val["diagnosis"]["character"].__dict__:
+    #         character = v
+    #     for k, v in val["diagnosis"]["disorder"].__dict__:
+    #         disorder = v
+    #     users.append(key)
+
+    return render_template('./admin_dashboard.html',username=session.get('username'),data=dv_val_value)
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
