@@ -1,0 +1,288 @@
+@import url("https://use.typekit.net/euz1eqv.css");
+
+html {
+	background: #fff;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	font-family: 'Arial', serif;
+
+}
+
+body {
+	overflow-x: hidden;
+	overflow-y: hidden;
+	font-size: 12px;
+	color: black;
+	letter-spacing: 1px;
+	text-decoration: none;
+	margin: 0;
+	overflow:auto;
+	&.active, &:hover {
+	    color: black;
+	}
+}
+
+header {
+	display: block;
+	width: 100%;
+	height: 115px;
+	z-index: 0;
+	background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/123024/menutexture.png);
+	background-position: center top;
+	background-size: auto 200px;
+	background-repeat: repeat-x;
+
+	.inner {
+		max-width: 1060px;
+		margin: 0 auto;
+		display: flex;
+		height: 70px;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+	}
+
+	.logo {
+		display: block;
+		width: 90px;
+		height: 90px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		text-align: center;
+
+		img {
+			margin-top: 10px;
+            border-radius: 30%;
+            height: 100%;
+            width: 100%;
+		}
+	}
+
+	nav {
+		display: block;
+
+		a {
+			font-family: 'Arial', serif;
+			font-size: 12px;
+			color: #8c8c8e;
+			text-transform: uppercase;
+			letter-spacing: 3px;
+			text-decoration: none;
+			margin: 0 18px;
+
+			&.active, &:hover {
+				color: white;
+			}
+		}
+		/*
+		@media screen and (min-width: 800px) {
+			display: block;
+		}
+		*/
+	}
+
+	.burger {
+		display: none;
+		position: relative;
+		top: -6px;
+		padding-left: 30px;
+
+		&:before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 30px;
+			height: 2px;
+			background: white;
+			box-shadow: 0 12px 0 0 white, 0 6px 0 0 white;
+		}
+		/*
+		@media screen and (min-width: 800px) {
+			display: none;
+		}*/
+	}
+
+	.donate-link {
+		width: 72px;
+		text-align: center;
+		position: absolute;
+		right: 10px;
+		top: 27px;
+		font-family: 'Arial', serif;
+		font-size: 12px;
+		color: white;
+		text-transform: uppercase;
+		letter-spacing: 3px;
+		text-decoration: none;
+		padding-bottom: 6px;
+		border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+	}
+}
+
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+	height: 50vh; 
+    margin: 0; 
+}
+form{
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    margin: 4rem;
+    padding: .5rem;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 30rem;
+}
+.label{
+    font-size: 1.7rem;
+    font-weight: bolder;
+	margin : 1rem 0rem 1rem 1rem;
+}
+.label2{
+	font-size: 1.5rem;
+	font-weight: bolder;
+	margin: 1rem;
+}
+.txt{
+	font-size: 1.2rem;
+	font-weight: lighter;
+}
+input,select{
+	margin: .3rem;
+    padding: 0.5rem;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+p{
+	font-size: .8rem;
+	font-weight: lighter;
+	margin: rem;
+}
+.signup{
+	color: red;
+}
+.forgotPassword{
+	margin-left: 2.5rem;
+	color: blue;
+}
+.login{
+	margin-left:2rem;
+}
+.error{
+	color: red;
+}
+
+.footer {
+    position: relative;
+	width: 100%;
+    padding: 1rem;
+	font-family: 'Arial', serif;
+    text-align: center;
+	margin-top: 7%;
+}
+
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+	right: 0;
+    width: 100%;
+    height: 100%;
+	background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/123024/menutexture.png);
+	background-position: center top;
+	transform: rotate(180deg);
+	background-size: auto 250px;
+    z-index: -1; 
+}
+    
+.footer .row{
+    width:100%;
+    margin:0rem;
+    padding:0.6% 0%;
+    color:white;
+    font-size:0.8em;
+}
+    
+    .footer .row a{
+    text-decoration:none;
+    color:black;
+    transition:0.5s;
+    }
+    
+    .footer .row a:hover{
+    color:#fff;
+    }
+    
+    
+.footer .row a{
+    font-size:2em;
+    margin:0% 1%;
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 767px) {
+    body {
+        font-size: 14px; /* Increase font size for better readability on small screens */
+    }
+
+    header {
+        height: auto; /* Adjust header height for small screens */
+        background-size: auto 200px; /* Adjust background size for better appearance */
+        padding: 10px ; /* Add some padding to the header */
+		width: 105%;
+    }
+
+    .inner {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .logo {
+		width: 70px;
+        height: 70px;
+    }
+
+    nav a{
+        display: none; 
+    }
+
+    .burger {
+        display: block; /* Display the burger menu icon */
+    }
+
+    .donate-link {
+        position: static;
+        text-align: center;
+        margin-top: 10px; /* Add margin for better spacing */
+    }
+
+    .container {
+        height: auto; /* Adjust container height for small screens */
+    }
+
+    form {
+        width: 90%; /* Adjust form width for better fit on small screens */
+        margin: 2rem auto; /* Center the form */
+    }
+
+    .label,
+    .label2 {
+        margin: 1rem 0;
+    }
+
+    .login {
+        margin-left: 0; /* Adjust margin for better alignment */
+    }
+	
+    .footer::before {
+        background-size: auto 200px; /* Adjust background size for better appearance */
+		width: 100%;
+    }
+}
